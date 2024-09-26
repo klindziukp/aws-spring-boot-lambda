@@ -1,0 +1,10 @@
+server:
+  port: 8090
+
+
+spring:
+  cloud:
+    aws:
+      dynamodb:
+        region: us-east-1
+        endpoint: http://localhost:4566

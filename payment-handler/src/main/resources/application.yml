@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: payment-processor
+  cloud:
+    aws:
+      sns:
+        endpoint: http://localhost.localstack.cloud:4566
+
+logging:
+  level:
+    org:
+      springframework: INFO
+
+com:
+  klindziuk:
+    aws:
+      sns:
+        payment:
+          topic: payments-topic

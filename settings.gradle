@@ -1,0 +1,5 @@
+rootProject.name = 'payment'
+include 'payment-producer'
+include 'payment-consumer'
+include 'payment-handler'
+include 'payment-model'

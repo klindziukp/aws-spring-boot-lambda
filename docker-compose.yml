@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:3.3.0
+    ports:
+      - "127.0.0.1:4510-4559:4510-4559"  # external service port range
+      - "127.0.0.1:4566:4566"            # LocalStack Edge Proxy
+    environment:
+      - LOCALSTACK_HOSTNAME=localhost.localstack.cloud  # set this env var to expose localstack to other containers
+      - AWS_ACCESS_KEY_ID=key
+      - AWS_SECRET_ACCESS_KEY=secret
+      - AWS_DEFAULT_REGION=us-east-1
+      - SERVICES=dynamodb,sns,sqs,lambda
+      - LAMBDA_LIMITS_CODE_SIZE_ZIPPED=104857600
+      - LAMBDA_LIMITS_CREATE_FUNCTION_REQUEST_SIZE=140334422
+      # ---
+      - DEBUG=1
+    volumes:
+      - "$PWD/tmp/localstack:/var/lib/localstack"
+      - "$PWD/dynamodb-lambda-function/shared:/shared"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./script/localstack/init-dynamodb.sh:/etc/localstack/init/ready.d/init-dynamodb.sh"
+#    networks:
+#      default:
+#        aliases:
+#          - localhost.localstack.cloud   # set this network aliases to expose localstack to other containers

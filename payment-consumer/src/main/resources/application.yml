@@ -1,0 +1,30 @@
+server:
+  port: 9081
+
+spring:
+  application:
+    name: payment-consumer
+  cloud:
+    aws:
+      sqs:
+        endpoint: http://localhost.localstack.cloud:4566
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: beans,env,health,info,metrics,mappings
+  endpoint:
+    health:
+      show: always
+
+com:
+  klindziuk:
+    api:
+      producer:
+        base-url: http://localhost:8090
+    aws:
+      sqs:
+        payment:
+          queue:
+            name: payments-queue

@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group 'com.klindziuk.aws'
+version '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    enabled = true
+}
+
+compileJava   {
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+}
+
+test {
+    useJUnitPlatform()
+}
