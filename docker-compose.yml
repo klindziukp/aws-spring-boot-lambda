@@ -1,4 +1,3 @@
-version: "3.8"
 
 services:
 
@@ -10,20 +9,46 @@ services:
       - "127.0.0.1:4566:4566"            # LocalStack Edge Proxy
     environment:
       - LOCALSTACK_HOSTNAME=localhost.localstack.cloud  # set this env var to expose localstack to other containers
+      - HOSTNAME_EXTERNAL=localstack  # set this env var to expose localstack to other containers
       - AWS_ACCESS_KEY_ID=key
       - AWS_SECRET_ACCESS_KEY=secret
       - AWS_DEFAULT_REGION=us-east-1
       - SERVICES=dynamodb,sns,sqs,lambda
       - LAMBDA_LIMITS_CODE_SIZE_ZIPPED=104857600
       - LAMBDA_LIMITS_CREATE_FUNCTION_REQUEST_SIZE=140334422
-      # ---
-      - DEBUG=1
+      - DEBUG=0
     volumes:
       - "$PWD/tmp/localstack:/var/lib/localstack"
-      - "$PWD/dynamodb-lambda-function/shared:/shared"
+      - "$PWD/payment-handler/build/libs:/shared"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./script/localstack/init-dynamodb.sh:/etc/localstack/init/ready.d/init-dynamodb.sh"
-#    networks:
-#      default:
-#        aliases:
-#          - localhost.localstack.cloud   # set this network aliases to expose localstack to other containers
+      - "./script/localstack/init-services.sh:/etc/localstack/init/ready.d/services-dynamodb.sh"
+    networks:
+      default:
+        aliases:
+          - localhost.localstack.cloud   # set this network aliases to expose localstack to other containers
+  payment-producer:
+    container_name: payment-producer
+    hostname: payment-producer
+    image: payment-producer:0.0.1-SNAPSHOT
+    ports:
+      - 8090:8090
+    environment:
+      AWS_ACCESS_KEY_ID: key
+      AWS_SECRET_ACCESS_KEY: secret
+      spring.cloud.aws.dynamodb.region: us-east-1
+      spring.cloud.aws.dynamodb.endpoint: http://localstack:4566
+
+  payment-consumer:
+    container_name: payment-consumer
+    hostname: payment-consumer
+    image: payment-consumer:0.0.1-SNAPSHOT
+    ports:
+      - 9081:9081
+    environment:
+      com.klindziuk.api.producer.base-url: http://payment-producer:8090
+      com.klindziuk.aws.sqs.payment.queue.name: payments-queue
+      AWS_ACCESS_KEY_ID: key
+      AWS_SECRET_ACCESS_KEY: secret
+      spring.application.name: payment-consumer
+      spring.cloud.aws.sqs.region: us-east-1
+      spring.cloud.aws.sqs.endpoint: http://localstack:4566

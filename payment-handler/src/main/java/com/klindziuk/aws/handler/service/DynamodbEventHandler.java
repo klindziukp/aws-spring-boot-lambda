@@ -23,11 +23,11 @@ public class DynamodbEventHandler implements Consumer<DynamodbEvent> {
   @Override
   public void accept(DynamodbEvent dynamodbEvent) {
     dynamodbEvent.getRecords().stream()
-        .map(this::toNewsEvent)
+        .map(this::toPaymentEvent)
         .forEach(paymentEventPublisher::publish);
   }
 
-  private PaymentEvent toNewsEvent(DynamodbEvent.DynamodbStreamRecord record) {
+  private PaymentEvent toPaymentEvent(DynamodbEvent.DynamodbStreamRecord record) {
     Map<String, AttributeValue> image = record.getDynamodb().getNewImage();
     if (Objects.isNull(image)) {
       image = record.getDynamodb().getOldImage();

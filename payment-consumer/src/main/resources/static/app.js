@@ -24,20 +24,22 @@ function connectToWebSocket() {
                       }
                     )
                 } else if (action === 'INSERT' && $payment.length === 0) {
-                    const paymentItem = '<div class="item" id="'+payment.id+'">' +
-                                       '<div class="content">' +
-                                         '<div class="meta">' +
-                                           '<span>'+moment(payment.publishedAt).format("DD-MMM-YYYY HH:mm:ss")+'</span>' +
-                                         '</div>' +
-                                         '<div class="ui divider"></div>' +
-                                         '<div class="ui big header">'+payment.title+'</div>' +
-                                       '</div>' +
-                                     '</div>'
-                    $('#paymentList').prepend(paymentItem)
-                    $('#' + payment.id).transition('glow')
-                }
-            })
-        },
+                                    const paymentItem = '<div class="item" id="'+$payment.id+'">' +
+                                                       '<div class="content">' +
+                                                         '<div class="meta">' +
+                                                           '<span>'+moment($payment.publishedAt).format("DD-MMM-YYYY HH:mm:ss")+'</span>' +
+                                                         '</div>' +
+                                                         '<div class="ui divider"></div>' +
+                                                         '<div class="ui big header">'+$payment.customerId+'</div>' +
+                                                         '<div class="ui divider"></div>' +
+                                                         '<div class="ui big header">'+$payment.amount+'</div>' +
+                                                       '</div>' +
+                                                     '</div>'
+                                    $('#paymentsList').prepend(paymentItem)
+                                    $('#' + $payment.id).transition('glow')
+                                }
+                            })
+                        },
         function() {
             showModal($('.modal.alert'), 'WebSocket Disconnected', 'WebSocket is disconnected. Maybe, payment-consumer is down or restarting')
             $('.connWebSocket').find('i').removeClass('green').addClass('red')

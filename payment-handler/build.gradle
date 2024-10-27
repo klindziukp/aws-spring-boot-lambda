@@ -31,21 +31,16 @@ dependencyManagement {
     }
 }
 
-compileJava   {
-    sourceCompatibility = '21'
-    targetCompatibility = '21'
+bootBuildImage {
+    enabled = false
 }
 
-jar {
-    manifest {
-        attributes 'Start-Class': 'com.klindziuk.aws.handler.DynamodbLambdaFunctionApplication'
-    }
+bootJar {
+    enabled = false
 }
-
-
 
 shadowJar {
-    archiveClassifier = 'aws'
+    archiveClassifier.set('')
     dependencies {
         exclude(
                 dependency("org.springframework.cloud:spring-cloud-function-web:4.1.3"))
@@ -67,20 +62,14 @@ shadowJar {
     }
 }
 
-bootJar {
-    enabled = false
-}
-
 dependencies {
     implementation project(':payment-model')
-    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-function-adapter-aws
     implementation 'org.springframework.cloud:spring-cloud-function-adapter-aws:4.1.3'
 
     implementation 'io.awspring.cloud:spring-cloud-aws-core:3.1.1'
     implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.1.1'
     implementation 'io.awspring.cloud:spring-cloud-aws-autoconfigure:3.1.1'
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-sns:3.1.1'
-
 
     implementation 'com.amazonaws:aws-lambda-java-events:3.11.4'
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.3'

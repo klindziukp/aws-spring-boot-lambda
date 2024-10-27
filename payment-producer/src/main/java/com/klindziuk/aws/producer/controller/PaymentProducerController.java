@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,12 +45,10 @@ public class PaymentProducerController {
   public List<PaymentResponse> getPayments() {
     return paymentService.getPayments();
   }
-  //
-  //    @DeleteMapping("/{id}")
-  //    public News deleteNews(@PathVariable String id) {
-  //        log.info("Delete news with id {}", id);
-  //        News news = newsService.validateAndGetNews(id);
-  //        newsService.deleteNews(id);
-  //        return news;
-  //    }
+
+  @DeleteMapping("/api/v1/payments/{id}")
+  public PaymentResponse deletePayment(@PathVariable String id) {
+    log.info("Delete payment with id {}", id);
+    return paymentService.deletePayment(id);
+  }
 }

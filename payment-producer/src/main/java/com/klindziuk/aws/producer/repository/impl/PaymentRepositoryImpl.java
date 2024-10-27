@@ -4,6 +4,7 @@
 
 package com.klindziuk.aws.producer.repository.impl;
 
+import com.klindziuk.aws.producer.exception.PaymentNotFoundException;
 import com.klindziuk.aws.producer.model.repository.PaymentEntity;
 import com.klindziuk.aws.producer.repository.PaymentRepository;
 import io.awspring.cloud.dynamodb.DynamoDbTemplate;
@@ -27,10 +28,10 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 
   @Override
   public List<PaymentEntity> getPayments() {
-    PageIterable<PaymentEntity> news = dynamoDbTemplate.scanAll(PaymentEntity.class);
-    return StreamSupport.stream(news.spliterator(), false)
+    final PageIterable<PaymentEntity> payments = dynamoDbTemplate.scanAll(PaymentEntity.class);
+    return StreamSupport.stream(payments.spliterator(), false)
         .flatMap(page -> page.items().stream())
-        .sorted((n1, n2) -> n2.getPaidAt().compareTo(n1.getPaidAt()))
+        .sorted((p1, p2) -> p2.getPaidAt().compareTo(p1.getPaidAt()))
         .toList();
   }
 
@@ -41,7 +42,7 @@ public class PaymentRepositoryImpl implements PaymentRepository {
     if (Objects.nonNull(paymentEntity)) {
       return paymentEntity;
     }
-    throw new RuntimeException(String.format("Payment [%s] not found", id));
+    throw new PaymentNotFoundException(id);
   }
 
   @Override

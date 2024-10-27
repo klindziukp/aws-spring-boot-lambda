@@ -15,14 +15,14 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class PaymentEventPublisher {
 
+  private final SnsTemplate snsTemplate;
+  private final AwsConfig awsConfig;
+
   @Autowired
   public PaymentEventPublisher(SnsTemplate snsTemplate, AwsConfig awsConfig) {
     this.snsTemplate = snsTemplate;
     this.awsConfig = awsConfig;
   }
-
-  private final SnsTemplate snsTemplate;
-  private final AwsConfig awsConfig;
 
   public void publish(PaymentEvent paymentEvent) {
     log.info("Publishing payment event: {}", paymentEvent);
