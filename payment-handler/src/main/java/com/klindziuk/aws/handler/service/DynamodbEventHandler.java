@@ -11,14 +11,18 @@ import com.klindziuk.aws.model.PaymentEvent;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
 @Component
 public class DynamodbEventHandler implements Consumer<DynamodbEvent> {
 
   private final PaymentEventPublisher paymentEventPublisher;
+
+  @Autowired
+  public DynamodbEventHandler(PaymentEventPublisher paymentEventPublisher) {
+    this.paymentEventPublisher = paymentEventPublisher;
+  }
 
   @Override
   public void accept(DynamodbEvent dynamodbEvent) {

@@ -1,15 +1,14 @@
-
 services:
 
   localstack:
     container_name: localstack
     image: localstack/localstack:3.3.0
     ports:
-      - "127.0.0.1:4510-4559:4510-4559"  # external service port range
-      - "127.0.0.1:4566:4566"            # LocalStack Edge Proxy
+      - "127.0.0.1:4510-4559:4510-4559"
+      - "127.0.0.1:4566:4566"
     environment:
-      - LOCALSTACK_HOSTNAME=localhost.localstack.cloud  # set this env var to expose localstack to other containers
-      - HOSTNAME_EXTERNAL=localstack  # set this env var to expose localstack to other containers
+      - LOCALSTACK_HOSTNAME=localhost.localstack.cloud
+      - HOSTNAME_EXTERNAL=localstack
       - AWS_ACCESS_KEY_ID=key
       - AWS_SECRET_ACCESS_KEY=secret
       - AWS_DEFAULT_REGION=us-east-1
@@ -25,14 +24,16 @@ services:
     networks:
       default:
         aliases:
-          - localhost.localstack.cloud   # set this network aliases to expose localstack to other containers
+          - localhost.localstack.cloud
+
   payment-producer:
     container_name: payment-producer
     hostname: payment-producer
     image: payment-producer:0.0.1-SNAPSHOT
     ports:
-      - 8090:8090
+      - 8088:8088
     environment:
+      server.port: 8088
       AWS_ACCESS_KEY_ID: key
       AWS_SECRET_ACCESS_KEY: secret
       spring.cloud.aws.dynamodb.region: us-east-1
@@ -43,9 +44,10 @@ services:
     hostname: payment-consumer
     image: payment-consumer:0.0.1-SNAPSHOT
     ports:
-      - 9081:9081
+      - 9099:9099
     environment:
-      com.klindziuk.api.producer.base-url: http://payment-producer:8090
+      server.port: 9099
+      com.klindziuk.api.producer.base-url: http://payment-producer:8088
       com.klindziuk.aws.sqs.payment.queue.name: payments-queue
       AWS_ACCESS_KEY_ID: key
       AWS_SECRET_ACCESS_KEY: secret

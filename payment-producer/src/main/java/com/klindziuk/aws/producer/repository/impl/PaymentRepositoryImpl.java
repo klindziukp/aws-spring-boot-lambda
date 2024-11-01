@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
 
-@Service
+@Repository
 public class PaymentRepositoryImpl implements PaymentRepository {
 
   private final DynamoDbTemplate dynamoDbTemplate;

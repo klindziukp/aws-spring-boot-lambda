@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.annotations.NotNull;
 
 @Configuration
-public class PaymnetsDynamoDbTableNameResolver implements DynamoDbTableNameResolver {
+public class PaymentsDynamoDbTableNameResolver implements DynamoDbTableNameResolver {
 
   @NotNull @Override
   public <T> String resolve(@NotNull Class<T> clazz) {

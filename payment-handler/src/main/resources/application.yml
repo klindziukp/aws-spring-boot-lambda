@@ -1,6 +1,6 @@
 spring:
   application:
-    name: payment-processor
+    name: payment-handler
   cloud:
     aws:
       sns:
